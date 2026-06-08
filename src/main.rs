@@ -2,6 +2,36 @@ use petgraph::graph::UnGraph;
 use petgraph::visit::Bfs;
 use std::collections::HashMap;
 
+// ── Función BFS que devuelve el camino con menos saltos ────────────────────────
+fn bfs_ruta(
+    grafo: &UnGraph<&str, u32>,
+    origen: petgraph::graph::NodeIndex,
+    destino: petgraph::graph::NodeIndex,
+) -> Option<Vec<petgraph::graph::NodeIndex>> {
+    let mut padres: HashMap<petgraph::graph::NodeIndex, petgraph::graph::NodeIndex> =
+        HashMap::new();
+
+    let mut bfs = Bfs::new(grafo, origen);
+
+    while let Some(nodo) = bfs.next(grafo) {
+        if nodo == destino {
+            let mut camino = vec![destino];
+            let mut actual = destino;
+            while actual != origen {
+                actual = *padres.get(&actual).unwrap();
+                camino.push(actual);
+            }
+            camino.reverse();
+            return Some(camino);
+        }
+        for vecino in grafo.neighbors(nodo) {
+            padres.entry(vecino).or_insert(nodo);
+        }
+    }
+
+    None
+}
+
 fn main() {
 
 
