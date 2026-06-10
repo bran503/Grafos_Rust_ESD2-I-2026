@@ -56,28 +56,6 @@ fn main() {
     grafo.add_edge(usulutan,     san_miguel,  75);
     grafo.add_edge(san_miguel,   la_union,    42);
 
-    // ── 4. Mostrar la red ──────────────────────────────────────────────────────
-    println!("=== Red de Transporte de El Salvador ===\n");
-    println!("Ciudades en la red:");
-    for nodo in grafo.node_indices() {
-        println!("  • {}", grafo[nodo]);
-    }
-
-    println!("\nConexiones disponibles (con distancias en km):");
-    for arista in grafo.edge_indices() {
-        let (a, b) = grafo.edge_endpoints(arista).unwrap();
-        let km = grafo[arista];
-        println!("  {} ↔ {}  ({} km)", grafo[a], grafo[b], km);
-    }
-
-    // ── 5. BFS: encontrar ruta con menos escalas ───────────────────────────────
-    //   BFS explora nivel por nivel ignorando los pesos.
-    //   Garantiza el camino con MENOS CONEXIONES (no necesariamente el más corto en km).
-    //   Eso responde: "¿Por cuántas ciudades paso mínimo para llegar al destino?"
-    println!("\n=== BFS: Ruta con menos escalas ===");
-    println!("Origen : San Salvador");
-    println!("Destino: La Unión\n");
-
   let ruta = bfs_ruta(&grafo, san_salvador, la_union);
 
     match ruta {
