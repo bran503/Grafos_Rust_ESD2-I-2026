@@ -56,5 +56,34 @@ fn main() {
     grafo.add_edge(usulutan,     san_miguel,  75);
     grafo.add_edge(san_miguel,   la_union,    42);
 
+  let ruta = bfs_ruta(&grafo, san_salvador, la_union);
+
+    match ruta {
+        Some(camino) => {
+            let nombres: Vec<&str> = camino.iter().map(|&idx| grafo[idx]).collect();
+            let km_total: u32 = camino
+                .windows(2)
+                .map(|par| {
+                    let arista = grafo.find_edge(par[0], par[1]).unwrap();
+                    grafo[arista]
+                })
+                .sum();
+            println!(
+                "Ruta encontrada ({} escalas, {} km en total):",
+                nombres.len() - 1,
+                km_total
+            );
+            println!("  {}", nombres.join(" → "));
+            println!("\n  Desglose:");
+            for par in camino.windows(2) {
+                let arista = grafo.find_edge(par[0], par[1]).unwrap();
+                println!(
+                    "    {} → {}  ({} km)",
+                    grafo[par[0]], grafo[par[1]], grafo[arista]
+                );
+            }
+        }
+        None => println!("No existe ruta entre las ciudades."),
+    }
 
 }
